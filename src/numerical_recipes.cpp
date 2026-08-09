@@ -492,11 +492,11 @@ RFLOAT betacf(RFLOAT a, RFLOAT b, RFLOAT x)
     f = (*func)(xt,prm);}
 
 void mnbrak(RFLOAT *ax, RFLOAT *bx, RFLOAT *cx,
-            RFLOAT *fa, RFLOAT *fb, RFLOAT *fc, RFLOAT(*func)(RFLOAT *, void*),
-            void *prm, int ncom, RFLOAT *pcom, RFLOAT *xicom)
+            RFLOAT *fa, RFLOAT *fb, RFLOAT *fc, RFLOAT(*func)(XmippIndexPtr<RFLOAT>, void*),
+            void *prm, int ncom, XmippIndexPtr<RFLOAT> pcom, XmippIndexPtr<RFLOAT> xicom)
 {
     RFLOAT ulim, u, r, q, fu, dum;
-    RFLOAT *xt=NULL;
+    XmippIndexPtr<RFLOAT> xt;
     ask_Tvector(xt, 1, ncom);
 
     F1DIM(*ax,*fa);
@@ -569,14 +569,14 @@ void mnbrak(RFLOAT *ax, RFLOAT *bx, RFLOAT *cx,
 #define ITMAX 100
 #define CGOLD 0.3819660
 #define ZEPS 1.0e-10
-RFLOAT brent(RFLOAT ax, RFLOAT bx, RFLOAT cx, RFLOAT(*func)(RFLOAT *,void*),
+RFLOAT brent(RFLOAT ax, RFLOAT bx, RFLOAT cx, RFLOAT(*func)(XmippIndexPtr<RFLOAT>,void*),
              void *prm, RFLOAT tol, RFLOAT *xmin,
-             int ncom, RFLOAT *pcom, RFLOAT *xicom)
+             int ncom, XmippIndexPtr<RFLOAT> pcom, XmippIndexPtr<RFLOAT> xicom)
 {
     int iter;
     RFLOAT a, b, d, etemp, fu, fv, fw, fx, p, q, r, tol1, tol2, u, v, w, x, xm;
     RFLOAT e = 0.0;
-    RFLOAT *xt=NULL;
+    XmippIndexPtr<RFLOAT> xt;
     ask_Tvector(xt, 1, ncom);
 
     a = (ax < cx ? ax : cx);
@@ -662,15 +662,15 @@ RFLOAT brent(RFLOAT ax, RFLOAT bx, RFLOAT cx, RFLOAT(*func)(RFLOAT *,void*),
 #undef F1DIM
 
 #define TOL 2.0e-4
-void linmin(RFLOAT *p, RFLOAT *xi, int n, RFLOAT &fret,
-            RFLOAT(*func)(RFLOAT *, void*), void *prm)
+void linmin(XmippIndexPtr<RFLOAT> p, XmippIndexPtr<RFLOAT> xi, int n, RFLOAT &fret,
+            RFLOAT(*func)(XmippIndexPtr<RFLOAT>, void*), void *prm)
 {
     int j;
     RFLOAT xx, xmin, fx, fb, fa, bx, ax;
 
     int ncom = n;
-    RFLOAT *pcom=NULL;
-    RFLOAT *xicom=NULL;
+    XmippIndexPtr<RFLOAT> pcom;
+    XmippIndexPtr<RFLOAT> xicom;
     ask_Tvector(pcom, 1, n);
     ask_Tvector(xicom, 1, n);
     for (j = 1;j <= n;j++)
@@ -694,13 +694,13 @@ void linmin(RFLOAT *p, RFLOAT *xi, int n, RFLOAT &fret,
 #undef TOL
 
 #define ITMAX 200
-void powell(RFLOAT *p, RFLOAT *xi, int n, RFLOAT ftol, int &iter,
-            RFLOAT &fret, RFLOAT(*func)(RFLOAT *, void *), void *prm,
+void powell(XmippIndexPtr<RFLOAT> p, XmippIndexPtr<RFLOAT> xi, int n, RFLOAT ftol, int &iter,
+            RFLOAT &fret, RFLOAT(*func)(XmippIndexPtr<RFLOAT>, void *), void *prm,
             bool show)
 {
     int i, ibig, j;
     RFLOAT t, fptt, fp, del;
-    RFLOAT *pt, *ptt, *xit;
+    XmippIndexPtr<RFLOAT> pt, ptt, xit;
     bool   different_from_0;
 
     ask_Tvector(pt, 1, n);
@@ -810,7 +810,7 @@ RFLOAT Pythag(RFLOAT a, RFLOAT b)
 #define SVDMAXITER 1000000
 void svdcmp(RFLOAT *U, int Lines, int Columns, RFLOAT *W, RFLOAT *V)
 {
-    RFLOAT *rv1 = (RFLOAT *)NULL;
+    XmippIndexPtr<RFLOAT> rv1;
     RFLOAT Norm, Scale;
     RFLOAT c, f, g, h, s;
     RFLOAT x, y, z;
@@ -1097,10 +1097,11 @@ void svdcmp(RFLOAT *U, int Lines, int Columns, RFLOAT *W, RFLOAT *V)
     free_Tvector(rv1, 0, Columns*Columns - 1);
 }
 
-void svbksb(RFLOAT *u, RFLOAT *w, RFLOAT *v, int m, int n, RFLOAT *b, RFLOAT *x)
+void svbksb(XmippIndexFlat2D<RFLOAT> u, XmippIndexPtr<RFLOAT> w, XmippIndexFlat2D<RFLOAT> v, int m, int n, XmippIndexPtr<RFLOAT> b, XmippIndexPtr<RFLOAT> x)
 {
     int jj, j, i;
-    RFLOAT s, *tmp;
+    RFLOAT s;
+    XmippIndexPtr<RFLOAT> tmp;
 
     ask_Tvector(tmp, 1, n);
     for (j = 1;j <= n;j++)

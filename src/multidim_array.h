@@ -50,6 +50,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include "src/funcs.h"
+#include "src/memory.h"
 #include "src/error.h"
 #include "src/args.h"
 #include "src/matrix1d.h"
@@ -3524,9 +3525,9 @@ public:
      * that the first physical index is 1 and not 0 as it usually is in C. New
      * memory is needed to hold the new RFLOAT pointer array.
      */
-    T*** adaptForNumericalRecipes3D(long int n = 0) const
+    XmippIndexVolume<T> adaptForNumericalRecipes3D(long int n = 0) const
     {
-        T*** m = NULL;
+        XmippIndexVolume<T> m;
         ask_Tvolume(m, 1, ZSIZE(*this), 1, YSIZE(*this), 1, XSIZE(*this));
 
         FOR_ALL_DIRECT_ELEMENTS_IN_ARRAY3D(*this)
@@ -3537,7 +3538,7 @@ public:
 
     /** Kill a 3D array produced for numerical recipes.
      */
-    void killAdaptationForNumericalRecipes3D(T*** m) const
+    void killAdaptationForNumericalRecipes3D(XmippIndexVolume<T> m) const
     {
         free_Tvolume(m, 1, ZSIZE(*this), 1, YSIZE(*this), 1, XSIZE(*this));
     }
@@ -3548,9 +3549,9 @@ public:
      * that the first physical index is 1 and not 0 as it usually is in C. New
      * memory is needed to hold the new RFLOAT pointer array.
      */
-    T** adaptForNumericalRecipes2D(long int n = 0) const
+    XmippIndexMatrix<T> adaptForNumericalRecipes2D(long int n = 0) const
     {
-        T** m = NULL;
+        XmippIndexMatrix<T> m;
         ask_Tmatrix(m, 1, YSIZE(*this), 1, XSIZE(*this));
 
         FOR_ALL_DIRECT_ELEMENTS_IN_ARRAY2D(*this)
@@ -3565,14 +3566,14 @@ public:
      * work with 2D arrays as a single pointer. The first element of the array
      * is pointed by result[1*Xdim+1], and in general result[i*Xdim+j]
      */
-    T* adaptForNumericalRecipes22D() const
+    XmippIndexFlat2D<T> adaptForNumericalRecipes22D() const
     {
-        return MULTIDIM_ARRAY(*this) - 1 - XSIZE(*this);
+        return XmippIndexFlat2D<T>(MULTIDIM_ARRAY(*this), XSIZE(*this));
     }
 
     /** Load 2D array from numerical recipes result.
      */
-    void loadFromNumericalRecipes2D(T** m, long int Ydim, long int Xdim)
+    void loadFromNumericalRecipes2D(XmippIndexMatrix<T> m, long int Ydim, long int Xdim)
     {
         resize(Ydim, Xdim);
 
@@ -3585,7 +3586,7 @@ public:
      *
      * The allocated memory is freed.
      */
-    void killAdaptationForNumericalRecipes2D(T** m) const
+    void killAdaptationForNumericalRecipes2D(XmippIndexMatrix<T> m) const
     {
         free_Tmatrix(m, 1, YSIZE(*this), 1, XSIZE(*this));
     }
@@ -3594,7 +3595,7 @@ public:
      *
      * Nothing needs to be done.
      */
-    void killAdaptationForNumericalRecipes22D(T** m) const
+    void killAdaptationForNumericalRecipes22D(XmippIndexFlat2D<T> m) const
         {}
 
     /** Produce a 1D array suitable for working with Numerical Recipes
@@ -3606,9 +3607,9 @@ public:
      *
      * This function is not ported to Python.
      */
-    T* adaptForNumericalRecipes1D() const
+    XmippIndexPtr<T> adaptForNumericalRecipes1D() const
     {
-        return MULTIDIM_ARRAY(*this) - 1;
+        return XmippIndexPtr<T>(MULTIDIM_ARRAY(*this), 1);
     }
 
     /** Kill a 1D array produced for Numerical Recipes.
@@ -3617,7 +3618,7 @@ public:
      *
      * This function is not ported to Python.
      */
-    void killAdaptationForNumericalRecipes1D(T* m) const
+    void killAdaptationForNumericalRecipes1D(XmippIndexPtr<T> m) const
         {}
 
     /** Computes the center of mass of the nth array

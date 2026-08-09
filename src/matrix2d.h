@@ -48,6 +48,7 @@
 #include <string.h>
 #include <iomanip>
 #include "src/matrix1d.h"
+#include "src/memory.h"
 
 /** @defgroup Matrices Matrix2D Matrices
  * @ingroup DataLibrary
@@ -722,9 +723,9 @@ public:
     * that the first physical index is 1 and not 0 as it usually is in C. New
     * memory is needed to hold the new RFLOAT pointer array.
     */
-    T** adaptForNumericalRecipes() const
+    XmippIndexMatrix<T> adaptForNumericalRecipes() const
     {
-        T** m = NULL;
+        XmippIndexMatrix<T> m;
         ask_Tmatrix(m, 1, mdimy, 1, mdimx);
 
         for (int i = 0; i < mdimy; i++)
@@ -740,14 +741,14 @@ public:
      * work with 2D arrays as a single pointer. The first element of the array
      * is pointed by result[1*Xdim+1], and in general result[i*Xdim+j]
      */
-    T* adaptForNumericalRecipes2() const
+    XmippIndexFlat2D<T> adaptForNumericalRecipes2() const
     {
-        return mdata - 1 - mdimx;
+        return XmippIndexFlat2D<T>(mdata, mdimx);
     }
 
     /** Load 2D array from numerical recipes result.
      */
-    void loadFromNumericalRecipes(T** m, int Ydim, int Xdim)
+    void loadFromNumericalRecipes(XmippIndexMatrix<T> m, int Ydim, int Xdim)
     {
         if (mdimx!=Xdim || mdimy!=Ydim)
             resize(Ydim, Xdim);
@@ -761,7 +762,7 @@ public:
      *
      * The allocated memory is freed.
      */
-    void killAdaptationForNumericalRecipes(T** m) const
+    void killAdaptationForNumericalRecipes(XmippIndexMatrix<T> m) const
     {
         free_Tmatrix(m, 1, mdimy, 1, mdimx);
     }
@@ -770,7 +771,7 @@ public:
      *
      * Nothing needs to be done.
      */
-    void killAdaptationForNumericalRecipes2(T** m) const
+    void killAdaptationForNumericalRecipes2(XmippIndexFlat2D<T> m) const
         {}
 
     /** Write this matrix to file
