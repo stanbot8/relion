@@ -83,11 +83,11 @@ RFLOAT betai(RFLOAT a, RFLOAT b, RFLOAT x);
 
 // Singular value descomposition of matrix a (numerical recipes, chapter 2-6 for details)
 void svdcmp(RFLOAT *a, int m, int n, RFLOAT *w, RFLOAT *v);
-void svbksb(RFLOAT *u, RFLOAT *w, RFLOAT *v, int m, int n, RFLOAT *b, RFLOAT *x);
+void svbksb(XmippIndexFlat2D<RFLOAT> u, XmippIndexPtr<RFLOAT> w, XmippIndexFlat2D<RFLOAT> v, int m, int n, XmippIndexPtr<RFLOAT> b, XmippIndexPtr<RFLOAT> x);
 
 // Optimization ------------------------------------------------------------
-void powell(RFLOAT *p, RFLOAT *xi, int n, RFLOAT ftol, int &iter,
-            RFLOAT &fret, RFLOAT(*func)(RFLOAT *, void *), void *prm,
+void powell(XmippIndexPtr<RFLOAT> p, XmippIndexPtr<RFLOAT> xi, int n, RFLOAT ftol, int &iter,
+            RFLOAT &fret, RFLOAT(*func)(XmippIndexPtr<RFLOAT>, void *), void *prm,
             bool show);
 
 // Working with matrices ---------------------------------------------------
@@ -95,11 +95,11 @@ void powell(RFLOAT *p, RFLOAT *xi, int n, RFLOAT ftol, int &iter,
 #define TINY 1.0e-20;
 /* Chapter 2 Section 3: LU DECOMPOSITION */
 template <class T>
-void ludcmp(T *a, int n, int *indx, T *d)
+void ludcmp(XmippIndexFlat2D<T> a, int n, XmippIndexPtr<int> indx, T *d)
 {
     int i, imax, j, k;
     T big, dum, sum, temp;
-    T *vv;
+    XmippIndexPtr<T> vv;
 
     ask_Tvector(vv, 1, n);
     *d = (T)1.0;
@@ -163,7 +163,7 @@ void ludcmp(T *a, int n, int *indx, T *d)
 // Solve Ax=b
 /* Chapter 2 Section 3: LU BACKWARD-FORWARD SUBSTITUTION */
 template <class T>
-void lubksb(T *a, int n, int *indx, T b[])
+void lubksb(XmippIndexFlat2D<T> a, int n, XmippIndexPtr<int> indx, XmippIndexPtr<T> b)
 {
     int i, ii = 0, ip, j;
     T sum;
@@ -192,10 +192,10 @@ void lubksb(T *a, int n, int *indx, T b[])
 /* Chapter 2, Section 1. Gauss-Jordan equation system resolution ----------- */
 // Solve Ax=b (b=matrix)
 template <class T>
-void gaussj(T *a, int n, T *b, int m)
+void gaussj(XmippIndexFlat2D<T> a, int n, XmippIndexFlat2D<T> b, int m)
 {
     T temp;
-    int *indxc, *indxr, *ipiv;
+    XmippIndexPtr<int> indxc, indxr, ipiv;
     int i, icol, irow, j, k, l, ll;
     T big, dum;
     RFLOAT pivinv;
