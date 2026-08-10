@@ -31,6 +31,7 @@ jobs:
           distro: ubuntu20.04
           githubToken: ${{ github.token }}
           dockerRunArgs: |
+            --platform linux/arm64
             --volume "${PWD}:/relion" 
           install: |
             apt-get update -q -y
