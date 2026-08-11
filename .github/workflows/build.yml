@@ -41,3 +41,27 @@ jobs:
             cd build
             cmake -DALTCPU=${{ matrix.altcpu }} -DCUDA=OFF -DFETCH_WEIGHTS=OFF -DPYTHON_EXE_PATH=/usr/bin/python3 -DTORCH_HOME_PATH=/tmp ..
             make
+
+  build_with_sycl:
+    runs-on: ubuntu-latest
+    container:
+      image: intel/oneapi-hpckit:2025.3.1-0-devel-ubuntu22.04@sha256:398cbb946c0047f0cb2a6a82263a93b9c23cc0fba2a0f4aa3a95aae164dd776b
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install dependencies
+        run: |
+          apt-get update -q -y
+          DEBIAN_FRONTEND=noninteractive apt-get install -q -y \
+            build-essential \
+            cmake \
+            git \
+            libfftw3-dev \
+            libfltk1.3-dev \
+            libpng-dev \
+            libtbb-dev \
+            libtiff-dev \
+            python3
+      - name: Build with SYCL
+        run: |
+          cmake -S . -B build -DCUDA=OFF -DSYCL=ON -DALTCPU=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=mpiicpx -DCMAKE_C_COMPILER=mpiicx -DFETCH_WEIGHTS=OFF -DGUI=OFF -DMKLFFT=ON -DMPI_CXX_COMPILER=mpiicpx -DMPI_C_COMPILER=mpiicx -DPYTHON_EXE_PATH=/usr/bin/python3 -DTORCH_HOME_PATH=/tmp
+          cmake --build build --parallel 2
