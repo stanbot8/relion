@@ -113,10 +113,12 @@ size_t ceilfracf(size_t a, size_t b)
 // 2D linear interpolation for complex data that interleaves real and
 // imaginary data, rather than storing them in a separate array
 #if _OPENMP >= 201307	// For OpenMP 4.0 and later
+#if !(defined(__GNUC__) && !defined(__clang__) && defined(__aarch64__))
 #pragma omp declare simd uniform(mdlX,mdlInitY)
 #pragma omp declare simd uniform(mdlX,mdlInitY) simdlen(4)
 #pragma omp declare simd uniform(mdlX,mdlInitY) simdlen(8)
 #pragma omp declare simd uniform(mdlX,mdlInitY) simdlen(16)
+#endif
 #else
 inline
 #endif
@@ -149,10 +151,12 @@ static void complex2D(std::complex<XFLOAT> *mdlComplex, XFLOAT &real, XFLOAT &im
 // 3D linear interpolation for complex data that interleaves real and
 // imaginary data, rather than storing them in a separate array
 #if _OPENMP >= 201307	// For OpenMP 4.0 and later
+#if !(defined(__GNUC__) && !defined(__clang__) && defined(__aarch64__))
 #pragma omp declare simd uniform(mdlX,mdlXY,mdlInitY,mdlInitZ)
 #pragma omp declare simd uniform(mdlX,mdlXY,mdlInitY,mdlInitZ) simdlen(4)
 #pragma omp declare simd uniform(mdlX,mdlXY,mdlInitY,mdlInitZ) simdlen(8)
 #pragma omp declare simd uniform(mdlX,mdlXY,mdlInitY,mdlInitZ) simdlen(16)
+#endif
 #else
 inline
 #endif
