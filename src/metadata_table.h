@@ -342,7 +342,7 @@ public:
 	void printLabels(std::ostream& ost);
 
 	// Randomise the order inside the STAR file
-	void randomiseOrder();
+	void randomiseOrder(int seed = -1);
 
 	// Feb14,2017 - Shaoda, Check whether the two MetaDataTables contain the same set of activeLabels
 	static bool compareLabels(const MetaDataTable &MD1, const MetaDataTable &MD2);

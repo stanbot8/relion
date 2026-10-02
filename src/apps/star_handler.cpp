@@ -786,7 +786,7 @@ class star_handler_parameters
 			else
 				init_random_generator(random_seed);
 
-			MD.randomiseOrder();
+			MD.randomiseOrder(random_seed);
 		}
 
 		long int n_obj = MD.numberOfObjects();
