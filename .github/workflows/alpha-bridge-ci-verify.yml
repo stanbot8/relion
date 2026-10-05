@@ -1,60 +1,15 @@
-on: [pull_request]
-
-name: Build RELION
-
+name: CI input verification
+on:
+  workflow_dispatch:
+    inputs:
+      probe:
+        type: string
+        required: true
 jobs:
-  build_on_x86_64:
+  check:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        altcpu: [ON, OFF]
     steps:
-    - uses: actions/checkout@v7
-      with:
-        ref: ${{ (github.event_name == 'schedule' || github.event_name == 
-          'workflow_run') && 'a7d313d5104f63aeb9daef28d0e786ecd9724ae0' || 
-          github.sha }}
-    - name: Install dependencies
-      run: |
-        sudo apt-get update -q -y && \
-        sudo apt-get install -q -y cmake git build-essential mpi-default-bin mpi-default-dev libfftw3-dev libtiff-dev libpng-dev libtbb-dev libfltk1.3-dev python3
-    - name: Build RELION for Linux x86_64
-      run: |-
-        mkdir build && cd build && cmake -DALTCPU=${{ matrix.altcpu }} -DCUDA=OFF -DFETCH_WEIGHTS=OFF -DPYTHON_EXE_PATH=/usr/bin/python3 -DTORCH_HOME_PATH=/tmp .. && make
-
-
-    needs:
-    - alpha_bridge_inputs
-    if: ${{ (success()) && needs.alpha_bridge_inputs.outputs.changed == 'true' 
-      }}
-  build_on_aarch64:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        altcpu: [ON, OFF]
-    steps:
-    - uses: actions/checkout@v7
-      with:
-        ref: ${{ (github.event_name == 'schedule' || github.event_name == 
-          'workflow_run') && 'a7d313d5104f63aeb9daef28d0e786ecd9724ae0' || 
-          github.sha }}
-    - name: Build RELION for Linux aarch64
-      uses: uraimo/run-on-arch-action@v3.1.0
-      with:
-        arch: aarch64
-        distro: ubuntu20.04
-        githubToken: ${{ github.token }}
-        dockerRunArgs: |
-          --volume "${PWD}:/relion" 
-        install: |
-          apt-get update -q -y
-          apt-get install -q -y cmake git build-essential mpi-default-bin mpi-default-dev libfftw3-dev libtiff-dev libpng-dev libtbb-dev libfltk1.3-dev python3
-        run: |
-          cd /relion
-          mkdir build
-          cd build
-          cmake -DALTCPU=${{ matrix.altcpu }} -DCUDA=OFF -DFETCH_WEIGHTS=OFF -DPYTHON_EXE_PATH=/usr/bin/python3 -DTORCH_HOME_PATH=/tmp ..
-          make
+    - run: echo 'Changed inputs reached the consumer'
     needs:
     - alpha_bridge_inputs
     if: ${{ (success()) && needs.alpha_bridge_inputs.outputs.changed == 'true' 
@@ -78,15 +33,12 @@ jobs:
         GH_TOKEN: ${{ github.token }}
         AB_REPOSITORY: ${{ github.repository }}
         AB_RUN_ID: ${{ github.run_id }}
-        AB_HEAD_SHA: ${{ (github.event_name == 'schedule' || github.event_name 
-          == 'workflow_run') && 'a7d313d5104f63aeb9daef28d0e786ecd9724ae0' || 
-          github.sha }}
-        AB_REF: ${{ (github.event_name == 'schedule' || github.event_name == 
-          'workflow_run') && 'refs/heads/master' || github.ref }}
+        AB_HEAD_SHA: ${{ github.sha }}
+        AB_REF: ${{ github.ref }}
         AB_WORKFLOW_DIGEST: 
-          60c579842b80a6cced55822b4f5e47e5cabd2c9a8335ae8f4fc69fd0fb0d0243
-        AB_EVENT: ${{ github.event_name }}
-        AB_SCHEDULE: ${{ github.event.schedule || '' }}
+          538b9a5f4a645070b988c8cc2bc361fe5412e9e5bb5ea5f9f39b3e269164c9cb
+        AB_EVENT: schedule
+        AB_SCHEDULE: alpha-bridge verification
         AB_VARIABLES: ${{ toJSON(vars) }}
         AB_INPUTS: ${{ toJSON(inputs) }}
         AB_WORKFLOW_RUN: ${{ toJSON(github.event.workflow_run) }}
