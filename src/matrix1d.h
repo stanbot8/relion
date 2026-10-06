@@ -46,6 +46,7 @@
 #define MATRIX1D_H_
 
 #include "src/funcs.h"
+#include "src/memory.h"
 #include "src/filename.h"
 
 extern int bestPrecision(float F, int _width);
@@ -916,9 +917,9 @@ public:
      *
      * This function is not ported to Python.
      */
-    T* adaptForNumericalRecipes() const
+    XmippIndexPtr<T> adaptForNumericalRecipes() const
     {
-        return MATRIX1D_ARRAY(*this) - 1;
+        return XmippIndexPtr<T>(MATRIX1D_ARRAY(*this), 1);
     }
 
     /** Kill an array produced for Numerical Recipes.
@@ -927,7 +928,7 @@ public:
      *
      * This function is not ported to Python.
      */
-    void killAdaptationForNumericalRecipes(T* m) const
+    void killAdaptationForNumericalRecipes(XmippIndexPtr<T> m) const
         {}
 
     /** CEILING
