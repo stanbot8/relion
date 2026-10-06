@@ -1,24 +1,30 @@
 {
   "default_workflow_permissions": "read",
   "definition_blob_sha1": {
-    ".github/workflows/alpha-bridge-ci-probe.yml": "f77ab4ad7b56a3571281506f6969a1e9889e556a",
-    ".github/workflows/alpha-bridge-ci-verify.yml": "95760790304a2bad6d6820ee35e70aafba80f356",
-    ".github/workflows/build.yml": "732c69b23ebf02fc10ad9448b01f6a009427d29a"
+    ".github/workflows/alpha-bridge-ci-consumer.yml": "dd3245f3a2a4027e71859a2e51513d2203429d3f",
+    ".github/workflows/alpha-bridge-ci-probe.yml": "aaccb32547883d4905e9c1e9f5b1907dbeaa9730",
+    ".github/workflows/alpha-bridge-ci-verify.yml": "97dd816b899c13f4586bd83fd63ef410f5cc750c",
+    ".github/workflows/build.yml": "7ed912a81418b8d289a6e1ac5a2d2ce3b773b76b",
+    ".github/workflows/crucible-call-alpha-bridge-ci-probe.yml": "0bc7db45c659d81ffd602bbfd39f8bf7d657cecf"
   },
   "definition_sha256": {
-    ".github/workflows/alpha-bridge-ci-probe.yml": "90f1497e0c8964df7ce687e21d00ea5f4472246fbbdbf3aa21826960efbb18c2",
-    ".github/workflows/alpha-bridge-ci-verify.yml": "4b1ca9d589df4e671637798677985a2baf15c4607d71689df399a109b491e0a2",
-    ".github/workflows/build.yml": "6e3178954ebdc0450c8b2475db025cdc76bbf2306df6726fdca224b34b39c0df"
+    ".github/workflows/alpha-bridge-ci-consumer.yml": "701dc471ca557edf1d75e39d83db1a368f1aaf1c9609c4d52cc803ac9901c03d",
+    ".github/workflows/alpha-bridge-ci-probe.yml": "ad96a7443de016087fa573620462807da8562856c36b566614cd747f1e904588",
+    ".github/workflows/alpha-bridge-ci-verify.yml": "25578ca86e98ceeb86fbcb238fdec0731d9d0ffe1580f65aa2e0000f41ff9a56",
+    ".github/workflows/build.yml": "5a37e48d5849875108dc5eb307d022702172095d0b1a2bbad63f099018b43c38",
+    ".github/workflows/crucible-call-alpha-bridge-ci-probe.yml": "dfb02ee69a2ce5279d5829f43ffa95d9a86b91e7d04604de461113b36787a7a9"
   },
-  "generator_sha256": "4bbd1a1f9315d134cec261dd0580b504db191355193dfc428c3ca0ac65bb6b74",
+  "generator_sha256": "57bbc5a594aacb9fe71e1c3ebf2678e841494ad1ede64e1a822c3e835b196631",
   "schema": "alpha-bridge/fork-ci",
   "source_branch": "master",
   "source_commit": "a7d313d5104f63aeb9daef28d0e786ecd9724ae0",
   "source_repository": "3dem/relion",
   "version": 1,
   "workflows": [
+    ".github/workflows/alpha-bridge-ci-consumer.yml",
     ".github/workflows/alpha-bridge-ci-probe.yml",
     ".github/workflows/alpha-bridge-ci-verify.yml",
-    ".github/workflows/build.yml"
+    ".github/workflows/build.yml",
+    ".github/workflows/crucible-call-alpha-bridge-ci-probe.yml"
   ]
 }
