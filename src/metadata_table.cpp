@@ -1772,10 +1772,9 @@ void MetaDataTable::printLabels(std::ostream &ost)
 	}
 }
 
-void MetaDataTable::randomiseOrder()
+void MetaDataTable::randomiseOrder(int seed)
 {
-	std::random_device rd;
-	std::mt19937 rng(rd());
+	std::mt19937 rng(seed < 0 ? std::random_device{}() : seed);
 	std::shuffle(objects.begin(), objects.end(), rng);
 }
 
